@@ -1,0 +1,13 @@
+deleteDatasources:
+  - name: Loki
+
+datasources:
+  - name: Loki
+    type: loki
+    access: proxy
+    orgId: 1
+    url: http://loki
+    basicAuth: false
+    isDefault: true
+    version: 2
+    editable: false
