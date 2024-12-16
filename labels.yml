@@ -6,15 +6,16 @@ services:
       # Docker network override for safety
       - "traefik.docker.network=emdr"
       # Entrypoints are listed in traefik.yaml, use only HTTPS (ours is called 'websecure')
-      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.loki.entrypoints=websecure"
       # Redirect rule, reading Host value (this also issues a cert for this subdomain if not stated otherwise)
-      - "traefik.http.routers.traefik.rule=Host(`loki.myemdr.ru`)"
+      - "traefik.http.routers.loki.rule=Host(`loki.myemdr.ru`)"
       # Configure 'traefik-auth' middleware
       - "traefik.http.middlewares.loki-auth.basicauth.users=${LOKI_CREDENTIALS}"
       # Use the above middleware
-      - "traefik.http.routers.traefik.middlewares=loki-auth"
+      - "traefik.http.routers.loki.middlewares=loki-auth"
       # Use regru as certresolver (configured in traefik.yaml)
-      - "traefik.http.routers.traefik.tls.certresolver=regru"
+      - "traefik.http.routers.loki.tls.certresolver=regru"
+      - "traefik.http.services.loki.loadbalancer.server.port=80"
 
   grafana:
     labels:
@@ -23,8 +24,9 @@ services:
       # Docker network override for safety
       - "traefik.docker.network=emdr"
       # Entrypoints are listed in traefik.yaml, use only HTTPS (ours is called 'websecure')
-      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
       # Redirect rule, reading Host value (this also issues a cert for this subdomain if not stated otherwise)
-      - "traefik.http.routers.traefik.rule=Host(`grafana.myemdr.ru`)"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.myemdr.ru`)"
       # Use regru as certresolver (configured in traefik.yaml)
-      - "traefik.http.routers.traefik.tls.certresolver=regru"
+      - "traefik.http.routers.grafana.tls.certresolver=regru"
+      - "traefik.http.services.grafana.loadbalancer.server.port=80"
