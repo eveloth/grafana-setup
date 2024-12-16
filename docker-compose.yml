@@ -1,20 +1,15 @@
-version: "3"
-
-networks:
-  loki:
-
 services:
   loki:
     container_name: loki
     image: grafana/loki:3.2.1
-    ports:
-      - "3100:80"
+    #ports:
+    #  - "3100:80"
     command: -config.file=/etc/loki/local-config.yaml
     volumes:
       - ./loki/loki-config.yml:/etc/loki/local-config.yaml
       - loki-storage:/loki
     networks:
-      - loki
+      - emdr
 
   promtail:
     container_name: promtail
@@ -25,16 +20,16 @@ services:
       - /var/lib/docker:/var/lib/docker
       - ./promtail/promtail-config.yml:/etc/promtail/config.yml
     networks:
-      - loki
+      - emdr
 
   grafana:
     container_name: grafana
     image: grafana/grafana:latest
     restart: unless-stopped
-    ports:
-      - "3000:80"
+    #ports:
+    #  - "3000:80"
     networks:
-      - loki
+      - emdr
     env_file: ./.env
     volumes:
       - grafana-storage:/var/lib/grafana
@@ -53,10 +48,9 @@ services:
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--web.enable-lifecycle'
-    expose:
-      - 9090
+      - '--web.listen-address=:80'
     networks:
-      - loki
+      - emdr
 
   node-exporter:
     image: prom/node-exporter:latest
@@ -71,11 +65,13 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-    expose:
-      - 9100
+      - '--web.listen-address=:80'
     networks:
-      - loki
+      - emdr
 
+networks:
+  emdr:
+    external: true
 
 volumes:
   grafana-storage:
