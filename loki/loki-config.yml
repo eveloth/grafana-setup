@@ -25,6 +25,7 @@ compactor:
 
 limits_config:
   retention_period: 168h
+  ingestion_rate_mb: 30
 
 query_range:
   results_cache:
