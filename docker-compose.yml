@@ -24,8 +24,6 @@ services:
     container_name: grafana
     image: grafana/grafana:latest
     restart: unless-stopped
-    #ports:
-    #  - "3000:80"
     networks:
       - emdr
     env_file: ./.env
@@ -67,6 +65,26 @@ services:
     networks:
       - emdr
 
+  tempo:
+    image: grafana/tempo:latest    
+    command: [ "-config.file=/etc/tempo.yml" ]
+    container_name: tempo
+    restart: unless-stopped
+    volumes:
+      - ./tempo/tempo.yml:/etc/tempo.yml
+      - tempo-storage:/var/tempo
+    networks:
+      - emdr
+
+  memcached:
+    image: memcached:1.6.29-alpine
+    command:
+     - "-p 80"
+    container_name: memcached
+    environment:
+      - MEMCACHED_MAX_MEMORY=64m  # Set the maximum memory usage
+      - MEMCACHED_THREADS=4       # Numb
+
 networks:
   emdr:
     external: true
@@ -77,4 +95,6 @@ volumes:
   loki-storage:
     driver: local
   prometheus-storage:
+    driver: local
+  tempo-storage:
     driver: local

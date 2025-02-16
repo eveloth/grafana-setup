@@ -5,3 +5,7 @@ GF_SECURITY_ADMIN_PASSWORD='admin'
 GF_USERS_ALLOW_SIGN_UP=false
 
 LOKI_CREDENTIALS='user:$hashedpassword'
+
+GRAFANA_TRAEFIK_HOST='grafana.d.localhost'
+LOKI_TRAEFIK_HOST='loki.d.localhost'
+TEMPO_TRAEFIK_HOST='tempo.d.localhost'

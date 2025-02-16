@@ -1,21 +1,47 @@
+prune: true
 deleteDatasources:
   - name: Loki
 
 datasources:
   - name: Loki
     type: loki
+    uid: loki-1
     access: proxy
     orgId: 1
     url: http://loki
     basicAuth: false
     isDefault: true
     version: 2
-    editable: false
+    editable: true
+    jsonData:
+      maxLines: 1000
+      derivedFields:
+        - datasourceUid: tempo-1
+          matcherRegex: '\"trace_id\":\"(\w+)\"'
+          name: 'Trace ID'
+          url: '${__value.raw}'
+          urlDisplayLabel: 'View Trace'
+        - matcherRegex: '\"span_id\":\"(\w+)\"'
+          name: 'Span ID'
+          url: '${__value.raw}'
+          urlDisplayLabel: 'View Span'
+
   - name: Prometheus
     type: prometheus
+    uid: prometheus-1
     access: proxy
     orgId: 1
     url: http://prometheus
     basicAuth: false
     version: 1
     editable: false
+
+  - name: Tempo
+    type: tempo
+    uid: tempo-1
+    access: proxy
+    orgId: 1
+    url: http://tempo
+    basicAuth: false
+    version: 1
+    editable: true
