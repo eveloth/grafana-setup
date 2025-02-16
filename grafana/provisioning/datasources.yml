@@ -11,7 +11,7 @@ datasources:
     url: http://loki
     basicAuth: false
     isDefault: true
-    version: 2
+    version: 3
     editable: true
     jsonData:
       maxLines: 1000
