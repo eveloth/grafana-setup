@@ -2,6 +2,7 @@ services:
   loki:
     container_name: loki
     image: grafana/loki:3.2.1
+    restart: unless-stopped
     command: -config.file=/etc/loki/local-config.yaml
     volumes:
       - ./loki/loki-config.yml:/etc/loki/local-config.yaml
@@ -12,6 +13,7 @@ services:
   promtail:
     container_name: promtail
     image: grafana/promtail:3.2.1
+    restart: unless-stopped
     command: -config.file=/etc/promtail/config.yml
     volumes:
       - /var/log:/var/log
@@ -78,6 +80,7 @@ services:
 
   memcached:
     image: memcached:1.6.29-alpine
+    restart: unless-stopped
     command:
      - "-p 80"
     container_name: memcached
