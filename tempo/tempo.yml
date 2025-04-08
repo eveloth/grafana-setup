@@ -10,7 +10,7 @@ cache:
   - roles:
     - frontend-search  
     memcached: 
-      addresses: dns+memcached
+      addresses: memcached
 
 query_frontend:
   search:
