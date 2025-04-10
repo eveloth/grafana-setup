@@ -1,0 +1,29 @@
+apiVersion: 1
+
+templates:
+  - orgId: 1
+    name: Telegram notification
+    template: |
+      {{- define "telegram_alert" -}}
+      {{ if .Alerts.Firing -}}
+      ⚠️ <b>ALERT</b> ⚠️
+      {{- else -}}
+      🚧 No firing alerts
+      {{- end }}
+      
+      {{ if .Alerts.Firing -}}
+      🔴 FIRING: {{len .Alerts.Firing}} 
+      {{- template "instance_summary" .Alerts.Firing }}
+      {{ end }}
+      {{- if .Alerts.Resolved -}}
+      🟢 RESOLVED: {{ len .Alerts.Resolved }} 
+      {{- template "instance_summary" .Alerts.Resolved }}
+      {{ end -}}
+      
+      {{ end }}
+      
+      {{ define "instance_summary"}}
+      {{ range . -}}
+      - {{ index .Labels "job"}}: {{ index .Annotations "summary" }}
+      {{ end }}
+      {{ end }}

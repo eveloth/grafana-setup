@@ -10,7 +10,7 @@ cache:
   - roles:
     - frontend-search  
     memcached: 
-      addresses: memcached
+      addresses: "memcached:80"
 
 query_frontend:
   search:
