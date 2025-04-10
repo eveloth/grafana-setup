@@ -24,6 +24,6 @@ templates:
       
       {{ define "instance_summary"}}
       {{ range . -}}
-      - {{ index .Labels "job"}}: {{ index .Annotations "summary" }}
+      - {{ index .Labels "job" }}: {{ index .Annotations "summary" }}
       {{ end }}
       {{ end }}
